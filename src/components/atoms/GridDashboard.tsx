@@ -42,6 +42,19 @@ export const GridDashboard = ({ className = '' }: GridDashboardProps) => {
         ));
     };
 
+    const moveBox = (id: string, direction: 'left' | 'right') => {
+        const index = boxes.findIndex(box => box.id === id);
+        if (index === -1) return;
+
+        const newBoxes = [...boxes];
+        if (direction === 'left' && index > 0) {
+            [newBoxes[index - 1], newBoxes[index]] = [newBoxes[index], newBoxes[index - 1]];
+        } else if (direction === 'right' && index < boxes.length - 1) {
+            [newBoxes[index + 1], newBoxes[index]] = [newBoxes[index], newBoxes[index + 1]];
+        }
+        setBoxes(newBoxes);
+    };
+
     return (
         <div className={`flex flex-col gap-4 w-full h-full ${className}`}>
             <div className="flex flex-wrap justify-end gap-2 relative z-10">
@@ -64,6 +77,9 @@ export const GridDashboard = ({ className = '' }: GridDashboardProps) => {
                         index={index}
                         onRemove={removeBox}
                         onResize={resizeBox}
+                        onMove={moveBox}
+                        isFirst={index === 0}
+                        isLast={index === boxes.length - 1}
                     />
                 ))}
             </div>

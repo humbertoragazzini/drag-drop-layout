@@ -11,9 +11,12 @@ interface GridBoxProps {
     index: number;
     onRemove: (id: string) => void;
     onResize: (id: string, span: number) => void;
+    onMove: (id: string, direction: 'left' | 'right') => void;
+    isFirst: boolean;
+    isLast: boolean;
 }
 
-export const GridBox = ({ box, index, onRemove, onResize }: GridBoxProps) => {
+export const GridBox = ({ box, index, onRemove, onResize, onMove, isFirst, isLast }: GridBoxProps) => {
     return (
         <div
             style={{
@@ -38,6 +41,26 @@ export const GridBox = ({ box, index, onRemove, onResize }: GridBoxProps) => {
                         {size}
                     </button>
                 ))}
+            </div>
+
+            {/* Move Controls */}
+            <div className="absolute top-2 left-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                    onClick={() => onMove(box.id, 'left')}
+                    disabled={isFirst}
+                    className={`w-6 h-6 rounded-full flex items-center justify-center border border-white/20 ${isFirst ? 'bg-black/10 text-white/30 cursor-not-allowed' : 'bg-black/20 hover:bg-black/40 text-white'}`}
+                    title="Move Left"
+                >
+                    &lt;
+                </button>
+                <button
+                    onClick={() => onMove(box.id, 'right')}
+                    disabled={isLast}
+                    className={`w-6 h-6 rounded-full flex items-center justify-center border border-white/20 ${isLast ? 'bg-black/10 text-white/30 cursor-not-allowed' : 'bg-black/20 hover:bg-black/40 text-white'}`}
+                    title="Move Right"
+                >
+                    &gt;
+                </button>
             </div>
 
             <button
