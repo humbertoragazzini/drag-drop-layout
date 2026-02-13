@@ -18,22 +18,30 @@ import { Draggable } from '../atoms/Draggable';
 import { Droppable } from '../atoms/Droppable';
 import { SortableItem } from '../atoms/SortableItem';
 
+import { Accordion } from '../atoms/Accordion';
+
 interface DragDropLayoutProps {
     className?: string;
 }
 
 export function DragDropLayout({ className = '' }: DragDropLayoutProps) {
     const [items, setItems] = useState([
-        { id: 'item-1', title: 'Analytics Dashboard', desc: 'Process user metrics', tags: ['Data', 'Viz'], span: 4 },
-        { id: 'item-2', title: 'User Profile', desc: 'Update avatar & settings', tags: ['User', 'Settings'], span: 2 },
-        { id: 'item-3', title: 'Payment Gateway', desc: 'Integrate Stripe API', tags: ['Payment', 'Backend'], span: 3 },
-        { id: 'item-4', title: 'Notifications', desc: 'Real-time alert system', tags: ['Socket', 'UI'], span: 3 },
-        { id: 'item-5', title: 'CI/CD Pipeline', desc: 'Automate build process', tags: ['DevOps', 'GitHub'], span: 5 },
-        { id: 'item-6', title: 'Authentication', desc: 'OAuth 2.0 implementation', tags: ['Security', 'Auth'], span: 3 },
-        { id: 'item-7', title: 'Database Schema', desc: 'Optimize user queries', tags: ['SQL', 'DB'], span: 4 },
-        { id: 'item-8', title: 'Landing Page', desc: 'Redesign hero section', tags: ['Frontend', 'CSS'], span: 6 },
-        { id: 'item-9', title: 'API Documentation', desc: 'Update Swagger docs', tags: ['Docs', 'API'], span: 6 },
-        { id: 'item-10', title: 'Mobile App', desc: 'Prepare iOS release', tags: ['Mobile', 'iOS'], span: 12 },
+        // Sales Items
+        { id: 'sales-1', title: 'Revenue Chart', desc: 'Monthly revenue trend', tags: ['Sales', 'Chart'], span: 12, category: 'Sales' },
+        { id: 'sales-2', title: 'Top Products', desc: 'Best selling items list', tags: ['Sales', 'List'], span: 8, category: 'Sales' },
+        { id: 'sales-3', title: 'Sales Map', desc: 'Geographic distribution', tags: ['Sales', 'Map'], span: 6, category: 'Sales' },
+        { id: 'sales-4', title: 'Conversion Rate', desc: 'Visitor to customer ratio', tags: ['Sales', 'KPI'], span: 3, category: 'Sales' },
+
+        // Metrics Items
+        { id: 'metrics-1', title: 'Active Users', desc: 'Real-time user count', tags: ['Metrics', 'User'], span: 12, category: 'Metrics' },
+        { id: 'metrics-2', title: 'Bounce Rate', desc: 'Page abandonment rate', tags: ['Metrics', 'Analytics'], span: 8, category: 'Metrics' },
+        { id: 'metrics-3', title: 'Session Duration', desc: 'Average time on site', tags: ['Metrics', 'Time'], span: 6, category: 'Metrics' },
+        { id: 'metrics-4', title: 'Server Load', desc: 'CPU and Memory usage', tags: ['Metrics', 'DevOps'], span: 3, category: 'Metrics' },
+
+        // Earnings Items
+        { id: 'earnings-1', title: 'Net Profit', desc: 'Total profit after tax', tags: ['Earnings', 'Finance'], span: 12, category: 'Earnings' },
+        { id: 'earnings-2', title: 'Expenses', desc: 'Operational costs breakdown', tags: ['Earnings', 'Cost'], span: 8, category: 'Earnings' },
+        { id: 'earnings-3', title: 'Forecast', desc: 'Next quarter prediction', tags: ['Earnings', 'AI'], span: 6, category: 'Earnings' },
     ].map(item => ({ ...item, parent: null as string | null })));
 
     const sensors = useSensors(
@@ -90,25 +98,35 @@ export function DragDropLayout({ className = '' }: DragDropLayoutProps) {
                 collisionDetection={closestCenter}
                 onDragEnd={handleDragEnd}
             >
-                {/* Top Bar with draggable items if they are not dropped */}
-                <h2 className="text-white font-bold mr-4 min-w-[80px]">Drag Items:</h2>
-                <div className="flex flex-wrap w-full bg-gray-800 p-4 flex gap-4 items-center border-b border-gray-700">
-                    {items.filter(item => item.parent === null).map((item) => (
-                        <Draggable key={item.id} id={item.id} className="bg-blue-600 text-white p-3 rounded-lg shadow-md cursor-grab active:cursor-grabbing hover:bg-blue-700 transition-colors">
-                            <div className="flex flex-col gap-1">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-lg">📦</span>
-                                    <h3 className="font-bold text-sm">{item.title}</h3>
-                                    <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded ml-auto">Col-{item.span}</span>
-                                </div>
-                                <p className="text-xs opacity-90 truncate">{item.desc}</p>
-                                <div className="mt-1 flex gap-1 flex-wrap">
-                                    {item.tags.map(tag => (
-                                        <span key={tag} className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">{tag}</span>
-                                    ))}
-                                </div>
-                            </div>
-                        </Draggable>
+                {/* Accordion Sidebar/Top Bar Area */}
+                <div className="bg-gray-900 p-4 border-b border-gray-700 space-y-2">
+                    <h2 className="text-white font-bold mb-2">Widget Library</h2>
+
+                    {(['Sales', 'Metrics', 'Earnings'] as const).map(category => (
+                        <Accordion key={category} title={category} defaultOpen={category === 'Sales'}>
+                            {items.filter(item => item.parent === null && item.category === category).map((item) => (
+                                <Draggable key={item.id} id={item.id} className="bg-blue-600 text-white p-3 rounded-lg shadow-md cursor-grab active:cursor-grabbing hover:bg-blue-700 transition-colors bg-opacity-80 min-w-[200px]">
+                                    <div className="flex flex-col gap-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-lg">
+                                                {category === 'Sales' ? '💰' : category === 'Metrics' ? '📊' : '�'}
+                                            </span>
+                                            <h3 className="font-bold text-sm">{item.title}</h3>
+                                            <span className="text-[10px] bg-black/30 px-1.5 py-0.5 rounded ml-auto">Col-{item.span}</span>
+                                        </div>
+                                        <p className="text-xs opacity-90 truncate">{item.desc}</p>
+                                        <div className="mt-1 flex gap-1 flex-wrap">
+                                            {item.tags.map(tag => (
+                                                <span key={tag} className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded">{tag}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </Draggable>
+                            ))}
+                            {items.filter(item => item.parent === null && item.category === category).length === 0 && (
+                                <div className="text-gray-500 text-sm italic p-2">All items added</div>
+                            )}
+                        </Accordion>
                     ))}
                 </div>
 
