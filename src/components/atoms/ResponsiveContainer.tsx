@@ -1,11 +1,11 @@
 import { type ReactNode, useState } from 'react';
 
-interface MainGridProps {
+interface ResponsiveContainerProps {
     children: ReactNode;
     className?: string;
 }
 
-export const MainGrid = ({ children, className = '' }: MainGridProps) => {
+export const ResponsiveContainer = ({ children, className = '' }: ResponsiveContainerProps) => {
     const [width, setWidth] = useState('100%');
     const [height, setHeight] = useState('100%');
 
