@@ -1,14 +1,12 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import { GridDashboard } from './components/atoms/GridDashboard'
-import './App.css'
+import { DragDropLayout } from './components/organisms/DragDropLayout';
+import './App.css';
 
 function App() {
 
   return (
     <>
-      <div className='h-screen w-screen bg-black p-4 overflow-auto'>
-        <GridDashboard />
+      <div className='h-screen w-screen bg-black overflow-hidden'>
+        <DragDropLayout />
       </div>
     </>
   )
