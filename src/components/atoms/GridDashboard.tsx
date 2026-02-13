@@ -31,6 +31,10 @@ export const GridDashboard = ({ className = '' }: GridDashboardProps) => {
         setBoxes([...boxes, newBox]);
     };
 
+    const removeBox = (id: string) => {
+        setBoxes(boxes.filter(box => box.id !== id));
+    };
+
     return (
         <div className={`flex flex-col gap-4 w-full h-full ${className}`}>
             <div className="flex flex-wrap justify-end gap-2 relative z-10">
@@ -53,9 +57,20 @@ export const GridDashboard = ({ className = '' }: GridDashboardProps) => {
                             backgroundColor: box.color,
                             gridColumn: `span ${box.span} / span ${box.span}`
                         }}
-                        className="h-32 rounded-lg flex items-center justify-center text-white font-bold shadow-md transition-all hover:scale-[1.02]"
+                        className="group relative h-32 rounded-lg flex items-center justify-center text-white font-bold shadow-md transition-all hover:scale-[1.02]"
                     >
-                        {index + 1} ({box.span})
+                        <span>{index + 1} ({box.span})</span>
+
+                        <button
+                            onClick={() => removeBox(box.id)}
+                            className="absolute top-2 right-2 w-6 h-6 bg-black/20 hover:bg-red-500/80 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all border border-white/20"
+                            title="Remove box"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
                     </div>
                 ))}
             </div>
