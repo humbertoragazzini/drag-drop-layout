@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { DndContext, type DragEndEvent } from '@dnd-kit/core';
 import { Draggable } from '../atoms/Draggable';
 import { Droppable } from '../atoms/Droppable';
 
@@ -11,7 +11,17 @@ export function DragDropLayout({ className = '' }: DragDropLayoutProps) {
     const [parent, setParent] = useState<string | null>(null);
     const draggableMarkup = (
         <Draggable id="draggable" className="bg-blue-500 text-white p-4 rounded shadow-md cursor-grab active:cursor-grabbing">
-            Drag me
+            <div className="flex flex-col gap-2 min-w-[200px]">
+                <div className="flex items-center gap-2">
+                    <span className="text-xl">📦</span>
+                    <h3 className="font-bold text-lg">Draggable Card</h3>
+                </div>
+                <p className="text-sm opacity-90">I am a draggable item with more content inside.</p>
+                <div className="mt-2 flex gap-2">
+                    <span className="text-xs bg-white/20 px-2 py-1 rounded">Tag 1</span>
+                    <span className="text-xs bg-white/20 px-2 py-1 rounded">Tag 2</span>
+                </div>
+            </div>
         </Draggable>
     );
 
@@ -19,7 +29,7 @@ export function DragDropLayout({ className = '' }: DragDropLayoutProps) {
         const { over } = event;
 
         // If dropped over the droppable container, update parent
-        setParent(over ? over.id : null);
+        setParent(over ? String(over.id) : null);
     }
 
     return (

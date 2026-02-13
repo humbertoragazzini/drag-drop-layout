@@ -1,5 +1,5 @@
 import { useDraggable } from '@dnd-kit/core';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 
 interface DraggableProps {
